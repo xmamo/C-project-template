@@ -13,7 +13,6 @@ ColumnLimit: 0
 QualifierAlignment: Left
 FixNamespaceComments: false
 IncludeBlocks: Regroup
-IndentAccessModifiers: true
 IndentCaseLabels: true
 IndentPPDirectives: BeforeHash
 IndentExternBlock: Indent
