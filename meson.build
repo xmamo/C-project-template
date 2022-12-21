@@ -8,7 +8,7 @@ project('project', 'c',
 )
 
 executable('project', 'source/main.c',
-  depencencies: [
+  dependencies: [
     dependency('glib-2.0')
   ]
 )
