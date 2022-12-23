@@ -1,8 +1,13 @@
-cmake_minimum_required(VERSION 3.9 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.14 FATAL_ERROR)
 
 project(project LANGUAGES C)
 
-set(CMAKE_POSITION_INDEPENDENT_CODE TRUE)
+include(CheckPIESupported)
+check_pie_supported(OUTPUT_VARIABLE PIE_SUPPORTED LANGUAGES C)
+
+if(PIE_SUPPORTED)
+  set(CMAKE_POSITION_INDEPENDENT_CODE TRUE)
+endif()
 
 if(CMAKE_BUILD_TYPE STREQUAL Release OR CMAKE_BUILD_TYPE STREQUAL MinSizeRel)
   include(CheckIPOSupported)
