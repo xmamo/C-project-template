@@ -1,4 +1,4 @@
-project('project', 'c',
+project('hello', 'c',
   default_options: [
     'warning_level=3',
     'b_lto=true',
@@ -7,7 +7,7 @@ project('project', 'c',
   ]
 )
 
-executable('project', 'source/main.c',
+executable('hello', 'source/main.c',
   dependencies: [
     dependency('glib-2.0')
   ]
