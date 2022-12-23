@@ -38,10 +38,10 @@ foreach(LANGUAGE ${PROJECT_LANGUAGES})
     set(${LANGUAGE}_COMPILER ${CMAKE_${LANGUAGE}_COMPILER_FRONTEND_VARIANT})
   endif()
 
-  if(${LANGUAGE}_COMPILER MATCHES "^(GNU|(Apple|ARM)?Clang|Intel(LLVM)?)$")
-    add_compile_options(-Wall -Wextra -pedantic)
+  if(${LANGUAGE}_COMPILER MATCHES "^(GNU|(ARM|Apple)?Clang|Intel(LLVM)?)$")
+    string(APPEND CMAKE_${LANGUAGE}_FLAGS " -Wall -Wextra -pedantic")
   elseif(${LANGUAGE}_COMPILER STREQUAL MSVC)
-    add_compile_options(/W4)
+    string(APPEND CMAKE_${LANGUAGE}_FLAGS " /W4")
   endif()
 endforeach()
 
