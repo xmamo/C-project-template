@@ -1,15 +1,23 @@
-cmake_minimum_required(VERSION 3.14 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.6 FATAL_ERROR)
 
 project(project LANGUAGES C)
 
-include(CheckPIESupported)
-check_pie_supported(OUTPUT_VARIABLE PIE_SUPPORTED LANGUAGES C)
+if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.14)
+  # Add PIE options when linking executable
+  cmake_policy(SET CMP0083 NEW)
 
-if(PIE_SUPPORTED)
-  set(CMAKE_POSITION_INDEPENDENT_CODE TRUE)
+  include(CheckPIESupported)
+  check_pie_supported(OUTPUT_VARIABLE PIE_SUPPORTED LANGUAGES C)
+
+  if(PIE_SUPPORTED)
+    set(CMAKE_POSITION_INDEPENDENT_CODE TRUE)
+  endif()
 endif()
 
-if(CMAKE_BUILD_TYPE STREQUAL Release OR CMAKE_BUILD_TYPE STREQUAL MinSizeRel)
+if(CMAKE_BUILD_TYPE MATCHES "^(Release|MinSizeRel)$" AND CMAKE_VERSION VERSION_GREATER_EQUAL 3.9)
+  # INTERPROCEDURAL_OPTIMIZATION is enforced when enabled
+  cmake_policy(SET CMP0069 NEW)
+
   include(CheckIPOSupported)
   check_ipo_supported(RESULT IPO_SUPPORTED)
 
