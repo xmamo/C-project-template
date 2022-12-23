@@ -1,20 +1,9 @@
 cmake_minimum_required(VERSION 3.6 FATAL_ERROR)
 
-project(project LANGUAGES C)
+set(PROJECT_LANGUAGES C)
+project(project LANGUAGES ${PROJECT_LANGUAGES})
 
-if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.14)
-  # Add PIE options when linking executable
-  cmake_policy(SET CMP0083 NEW)
-
-  include(CheckPIESupported)
-  check_pie_supported(OUTPUT_VARIABLE PIE_SUPPORTED LANGUAGES C)
-
-  if(PIE_SUPPORTED)
-    set(CMAKE_POSITION_INDEPENDENT_CODE TRUE)
-  endif()
-endif()
-
-if(CMAKE_BUILD_TYPE MATCHES "^(Release|MinSizeRel)$" AND CMAKE_VERSION VERSION_GREATER_EQUAL 3.9)
+if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.9 AND CMAKE_BUILD_TYPE MATCHES "^(Release|MinSizeRel)$")
   # INTERPROCEDURAL_OPTIMIZATION is enforced when enabled
   cmake_policy(SET CMP0069 NEW)
 
@@ -23,6 +12,18 @@ if(CMAKE_BUILD_TYPE MATCHES "^(Release|MinSizeRel)$" AND CMAKE_VERSION VERSION_G
 
   if(IPO_SUPPORTED)
     set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)
+  endif()
+endif()
+
+if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.14)
+  # Add PIE options when linking executable
+  cmake_policy(SET CMP0083 NEW)
+
+  include(CheckPIESupported)
+  check_pie_supported(OUTPUT_VARIABLE PIE_SUPPORTED LANGUAGES ${PROJECT_LANGUAGES})
+
+  if(PIE_SUPPORTED)
+    set(CMAKE_POSITION_INDEPENDENT_CODE TRUE)
   endif()
 endif()
 
