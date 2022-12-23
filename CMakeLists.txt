@@ -5,6 +5,7 @@ project(project LANGUAGES C)
 set(CMAKE_POSITION_INDEPENDENT_CODE TRUE)
 
 if(CMAKE_BUILD_TYPE STREQUAL Release OR CMAKE_BUILD_TYPE STREQUAL MinSizeRel)
+  include(CheckIPOSupported)
   check_ipo_supported(RESULT IPO_SUPPORTED)
 
   if(IPO_SUPPORTED)
