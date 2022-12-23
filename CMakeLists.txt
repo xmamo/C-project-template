@@ -40,7 +40,7 @@ foreach(LANGUAGE ${PROJECT_LANGUAGES})
 
   if(${LANGUAGE}_COMPILER MATCHES "^(GNU|(Apple|ARM)?Clang|Intel(LLVM)?)$")
     add_compile_options(-Wall -Wextra -pedantic)
-  elseif(C_COMPILER STREQUAL MSVC)
+  elseif(${LANGUAGE}_COMPILER STREQUAL MSVC)
     add_compile_options(/W4)
   endif()
 endforeach()
