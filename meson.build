@@ -1,9 +1,9 @@
 project('hello', 'c',
   default_options: [
     'warning_level=3',
-    'b_lto=true',
     'b_ndebug=if-release',
-    'b_pie=true'
+    'b_pie=true',
+    'b_lto=true'
   ]
 )
 
