@@ -27,11 +27,23 @@ if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.14)
   endif()
 endif()
 
-if(CMAKE_C_COMPILER_ID MATCHES GNU|Clang)
-  add_compile_options(-Wall -Wextra -pedantic)
-elseif(MSVC)
-  add_compile_options(/W4)
-endif()
+foreach(LANGUAGE ${PROJECT_LANGUAGES})
+  set(${LANGUAGE}_COMPILER ${CMAKE_${LANGUAGE}_COMPILER_ID})
+
+  if(NOT "${CMAKE_${LANGUAGE}_SIMULATE_ID}" STREQUAL "")
+    set(${LANGUAGE}_COMPILER ${CMAKE_${LANGUAGE}_SIMULATE_ID})
+  endif()
+
+  if(NOT "${CMAKE_${LANGUAGE}_COMPILER_FRONTEND_VARIANT}" STREQUAL "")
+    set(${LANGUAGE}_COMPILER ${CMAKE_${LANGUAGE}_COMPILER_FRONTEND_VARIANT})
+  endif()
+
+  if(${LANGUAGE}_COMPILER MATCHES "^(GNU|(Apple|ARM)?Clang|Intel(LLVM)?)$")
+    add_compile_options(-Wall -Wextra -pedantic)
+  elseif(C_COMPILER STREQUAL MSVC)
+    add_compile_options(/W4)
+  endif()
+endforeach()
 
 find_package(PkgConfig MODULE REQUIRED)
 pkg_check_modules(GLIB REQUIRED IMPORTED_TARGET glib-2.0)
