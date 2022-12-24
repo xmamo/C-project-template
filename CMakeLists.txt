@@ -3,7 +3,9 @@ cmake_minimum_required(VERSION 3.6 FATAL_ERROR)
 set(PROJECT_LANGUAGES C)
 project(hello LANGUAGES ${PROJECT_LANGUAGES})
 
-if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.9 AND CMAKE_BUILD_TYPE MATCHES "^(Release|MinSizeRel)$")
+# Enable IPO on release builds:
+
+if(CMAKE_BUILD_TYPE MATCHES "^(Release|MinSizeRel)$" AND CMAKE_VERSION VERSION_GREATER_EQUAL 3.9)
   # INTERPROCEDURAL_OPTIMIZATION is enforced when enabled
   cmake_policy(SET CMP0069 NEW)
 
@@ -14,6 +16,8 @@ if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.9 AND CMAKE_BUILD_TYPE MATCHES "^(Relea
     set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)
   endif()
 endif()
+
+# Enable PIE:
 
 if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.14)
   # Add PIE options when linking executable
@@ -27,23 +31,39 @@ if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.14)
   endif()
 endif()
 
-foreach(LANGUAGE ${PROJECT_LANGUAGES})
-  set(${LANGUAGE}_COMPILER ${CMAKE_${LANGUAGE}_COMPILER_ID})
+# Enable compiler warnings:
 
-  if(NOT "${CMAKE_${LANGUAGE}_SIMULATE_ID}" STREQUAL "")
-    set(${LANGUAGE}_COMPILER ${CMAKE_${LANGUAGE}_SIMULATE_ID})
-  endif()
+if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.14)
+  foreach(LANGUAGE ${PROJECT_LANGUAGES})
+    set(${LANGUAGE}_COMPILER "${CMAKE_${LANGUAGE}_COMPILER_ID}")
 
-  if(NOT "${CMAKE_${LANGUAGE}_COMPILER_FRONTEND_VARIANT}" STREQUAL "")
-    set(${LANGUAGE}_COMPILER ${CMAKE_${LANGUAGE}_COMPILER_FRONTEND_VARIANT})
-  endif()
+    if(NOT "${CMAKE_${LANGUAGE}_SIMULATE_ID}" STREQUAL "")
+      set(${LANGUAGE}_COMPILER ${CMAKE_${LANGUAGE}_SIMULATE_ID})
+    endif()
 
-  if(${LANGUAGE}_COMPILER MATCHES "^(GNU|(ARM|Apple)?Clang|Intel(LLVM)?)$")
-    string(APPEND CMAKE_${LANGUAGE}_FLAGS " -Wall -Wextra -pedantic")
-  elseif(${LANGUAGE}_COMPILER STREQUAL MSVC)
-    string(APPEND CMAKE_${LANGUAGE}_FLAGS " /W4")
-  endif()
-endforeach()
+    if(NOT "${CMAKE_${LANGUAGE}_COMPILER_FRONTEND_VARIANT}" STREQUAL "")
+      set(${LANGUAGE}_COMPILER ${CMAKE_${LANGUAGE}_COMPILER_FRONTEND_VARIANT})
+    endif()
+
+    if(${LANGUAGE}_COMPILER MATCHES "^(GNU|(ARM|Apple)?Clang|Intel(LLVM)?)$")
+      set(${LANGUAGE}_FLAGS "-Wall -Wextra -pedantic")
+    elseif(${LANGUAGE}_COMPILER STREQUAL MSVC)
+      set(${LANGUAGE}_FLAGS /W4)
+    else()
+      set(${LANGUAGE}_FLAGS "")
+    endif()
+
+    if(NOT ${LANGUAGE}_FLAGS STREQUAL "")
+      if("${CMAKE_${LANGUAGE}_FLAGS}" STREQUAL "")
+        set(CMAKE_${LANGUAGE}_FLAGS ${${LANGUAGE}_FLAGS})
+      else()
+        string(APPEND CMAKE_${LANGUAGE}_FLAGS " " ${${LANGUAGE}_FLAGS})
+      endif()
+    endif()
+  endforeach()
+endif()
+
+# Add executable and the libraries it depends upon:
 
 find_package(PkgConfig MODULE REQUIRED)
 pkg_check_modules(GLIB REQUIRED IMPORTED_TARGET glib-2.0)
