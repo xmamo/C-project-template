@@ -7,7 +7,7 @@ project('hello', 'c',
   ]
 )
 
-executable('hello', 'source/main.c',
+executable('hello', 'hello/main.c',
   dependencies: [
     dependency('glib-2.0')
   ]

@@ -68,5 +68,5 @@ endif()
 find_package(PkgConfig MODULE REQUIRED)
 pkg_check_modules(GLIB REQUIRED IMPORTED_TARGET glib-2.0)
 
-add_executable(${PROJECT_NAME} source/main.c)
-target_link_libraries(${PROJECT_NAME} PRIVATE PkgConfig::GLIB)
+add_executable(hello hello/main.c)
+target_link_libraries(hello PRIVATE PkgConfig::GLIB)
