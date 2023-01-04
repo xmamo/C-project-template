@@ -10,10 +10,9 @@ AllowShortLoopsOnASingleLine: false
 AlwaysBreakBeforeMultilineStrings: true
 AlwaysBreakTemplateDeclarations: Yes
 BreakBeforeBinaryOperators: All
-ColumnLimit: 120
+ColumnLimit: 0
 ContinuationIndentWidth: 2
 FixNamespaceComments: false
-IncludeBlocks: Regroup
 IndentCaseLabels: true
 IndentExternBlock: Indent
 IndentPPDirectives: BeforeHash
