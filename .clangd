@@ -1,2 +1,5 @@
 Diagnostics:
   UnusedIncludes: Strict
+
+Hover:
+  ShowAKA: Yes

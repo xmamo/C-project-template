@@ -1,0 +1,12 @@
+FormatStyle: file
+
+HeaderFilterRegex: .*\.h(pp)?
+
+Checks: >-
+  bugprone-*,
+  concurrency-*,
+  misc-*,
+  modernize-*,
+  performance-*,
+  portability-*,
+  readability-*,
