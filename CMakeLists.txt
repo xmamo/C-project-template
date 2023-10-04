@@ -5,7 +5,7 @@ project(hello LANGUAGES C)
 # Enable IPO on release builds:
 
 if(CMAKE_BUILD_TYPE MATCHES "^(Release|MinSizeRel)$" AND CMAKE_VERSION VERSION_GREATER_EQUAL 3.9)
-  cmake_policy(SET CMP0069 NEW)  # INTERPROCEDURAL_OPTIMIZATION is enforced when enabled
+  cmake_policy(SET CMP0069 NEW)  # CMP0069: INTERPROCEDURAL_OPTIMIZATION is enforced when enabled
 
   include(CheckIPOSupported)
   check_ipo_supported(RESULT IPO_SUPPORTED)
@@ -18,7 +18,7 @@ endif()
 # Enable PIE:
 
 if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.14)
-  cmake_policy(SET CMP0083 NEW)  # Add PIE options when linking executable
+  cmake_policy(SET CMP0083 NEW)  # CMP0083: Add PIE options when linking executable
 
   include(CheckPIESupported)
   check_pie_supported(OUTPUT_VARIABLE PIE_SUPPORTED LANGUAGES C)
