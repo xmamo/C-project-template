@@ -1,3 +1,5 @@
+#include <stdlib.h>
+
 #include <glib/gprintf.h>
 
 int main(int argc, char** argv) {

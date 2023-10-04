@@ -1,7 +1,5 @@
 FormatStyle: file
 
-HeaderFilterRegex: .*\.h(pp)?
-
 Checks: >-
   bugprone-*,
   concurrency-*,
