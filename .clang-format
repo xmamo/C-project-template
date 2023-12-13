@@ -2,10 +2,12 @@ BasedOnStyle: LLVM
 AlignAfterOpenBracket: BlockIndent
 AlignEscapedNewlines: Left
 AlignOperands: DontAlign
-AlignTrailingComments: { Kind: Never }
-AllowShortBlocksOnASingleLine: Empty
+AlignTrailingComments: { Kind: Leave }
+AllowShortBlocksOnASingleLine: Always
+AllowShortCaseLabelsOnASingleLine: true
 AllowShortFunctionsOnASingleLine: Empty
-AllowShortLambdasOnASingleLine: Inline
+AllowShortIfStatementsOnASingleLine: AllIfsAndElse
+AllowShortLoopsOnASingleLine: true
 AlwaysBreakBeforeMultilineStrings: true
 AlwaysBreakTemplateDeclarations: Yes
 BreakArrays: false
@@ -16,18 +18,21 @@ ColumnLimit: 0
 FixNamespaceComments: false
 IndentCaseLabels: true
 IndentExternBlock: Indent
+IndentPPDirectives: BeforeHash
 IndentRequiresClause: false
-IndentWidth: 2
 InsertNewlineAtEOF: true
+IntegerLiteralSeparator: { Binary: 8, Decimal: 3, Hex: 2 }
+JavaScriptQuotes: Double
 KeepEmptyLinesAtTheStartOfBlocks: false
-LineEnding: LF
 NamespaceIndentation: All
 PointerAlignment: Left
 QualifierAlignment: Left
+RemoveParentheses: ReturnStatement
 RemoveSemicolon: true
 SeparateDefinitionBlocks: Always
 SortIncludes: CaseInsensitive
-SpaceAfterTemplateKeyword: false
+SortJavaStaticImport: After
+SpaceBeforeParens: ControlStatementsExceptControlMacros
 SpacesBeforeTrailingComments: 2
 SpacesInContainerLiterals: false
 TabWidth: 2
