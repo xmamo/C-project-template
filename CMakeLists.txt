@@ -8,7 +8,7 @@ if(CMAKE_BUILD_TYPE MATCHES "^(Release|MinSizeRel)$" AND CMAKE_VERSION VERSION_G
   cmake_policy(SET CMP0069 NEW)  # CMP0069: INTERPROCEDURAL_OPTIMIZATION is enforced when enabled
 
   include(CheckIPOSupported)
-  check_ipo_supported(RESULT IPO_SUPPORTED)
+  check_ipo_supported(RESULT IPO_SUPPORTED LANGUAGES C)
 
   if(IPO_SUPPORTED)
     set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)
@@ -32,32 +32,29 @@ endif()
 
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
+set(CMAKE_C_EXTENSIONS OFF)
 
 # Enable compiler warnings:
 
-set(C_COMPILER "${CMAKE_C_COMPILER_ID}")
-
-if(NOT "${CMAKE_C_SIMULATE_ID}" STREQUAL "")
-  set(C_COMPILER "${CMAKE_C_SIMULATE_ID}")
-endif()
-
 if(NOT "${CMAKE_C_COMPILER_FRONTEND_VARIANT}" STREQUAL "")
-  set(C_COMPILER "${CMAKE_C_COMPILER_FRONTEND_VARIANT}")
-endif()
-
-if(C_COMPILER MATCHES "^(GNU|(ARM|Apple)?Clang|Intel(LLVM)?)$")
-  set(C_FLAGS "-pedantic-errors -Wall -Wextra")
-elseif(C_COMPILER STREQUAL MSVC)
-  set(C_FLAGS "/Wall")
+  set(c_compiler "${CMAKE_C_COMPILER_FRONTEND_VARIANT}")
+elseif(NOT "${CMAKE_C_SIMULATE_ID}" STREQUAL "")
+  set(c_compiler "${CMAKE_C_SIMULATE_ID}")
 else()
-  set(C_FLAGS "")
+  set(c_compiler "${CMAKE_C_COMPILER_ID}")
 endif()
 
-if(NOT C_FLAGS STREQUAL "")
+if(c_compiler MATCHES "^(GNU|(ARM|Apple)?Clang|Intel(LLVM)?)$")
+  set(c_flags "-pedantic-errors -Wall -Wextra")
+elseif(c_compiler STREQUAL MSVC)
+  set(c_flags "/W4")
+endif()
+
+if(NOT "${c_flags}" STREQUAL "")
   if("${CMAKE_C_FLAGS}" STREQUAL "")
-    set(CMAKE_C_FLAGS "${C_FLAGS}")
+    set(CMAKE_C_FLAGS "${c_flags}")
   else()
-    string(APPEND CMAKE_C_FLAGS " ${C_FLAGS}")
+    string(APPEND CMAKE_C_FLAGS " ${c_flags}")
   endif()
 endif()
 
@@ -65,7 +62,7 @@ endif()
 
 set(CMAKE_C_CLANG_TIDY clang-tidy -p "${CMAKE_CURRENT_BINARY_DIR}")
 
-# Add executable and the libraries it depends upon:
+# Add the executable and the libraries it depends upon:
 
 find_package(PkgConfig MODULE REQUIRED)
 pkg_check_modules(GLIB REQUIRED IMPORTED_TARGET glib-2.0)
